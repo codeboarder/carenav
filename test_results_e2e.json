@@ -1,0 +1,145 @@
+{
+  "total": 23,
+  "passed": 23,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "Health Check",
+      "status": "PASS",
+      "details": "Status: 200",
+      "timestamp": "2026-02-04T15:29:29.884504"
+    },
+    {
+      "name": "Get Demo Patient",
+      "status": "PASS",
+      "details": "Patient ID: 1",
+      "timestamp": "2026-02-04T15:29:29.887293"
+    },
+    {
+      "name": "Create Demo Documents",
+      "status": "PASS",
+      "details": "Created 37 documents",
+      "timestamp": "2026-02-04T15:29:29.891347"
+    },
+    {
+      "name": "Get Documents",
+      "status": "PASS",
+      "details": "Retrieved 37 documents",
+      "timestamp": "2026-02-04T15:29:29.897708"
+    },
+    {
+      "name": "Document Categories",
+      "status": "PASS",
+      "details": "Found categories: {'medical', 'identity', 'legal', 'insurance', 'ai_analysis', 'income', 'financial', 'veteran', 'bank'}",
+      "timestamp": "2026-02-04T15:29:29.903976"
+    },
+    {
+      "name": "Medicaid Eligibility",
+      "status": "PASS",
+      "details": "Result: {\"medicaid\": {\"eligible\": false, \"countable\": 3000.0, \"over_by\": 1000.0, \"asset_eligible\": false, \"income_eligible\": true, \"total_income\": 2425.0, \"explanation\": \"Countable assets: $3,000.00 (limit: $",
+      "timestamp": "2026-02-04T15:29:29.907666"
+    },
+    {
+      "name": "VA Eligibility",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-04T15:29:30.130827"
+    },
+    {
+      "name": "Facility Search",
+      "status": "PASS",
+      "details": "Found 0 facilities",
+      "timestamp": "2026-02-04T15:29:30.132751"
+    },
+    {
+      "name": "Chat - Medicaid Question",
+      "status": "PASS",
+      "details": "Response length: 360, mentions Medicaid: True",
+      "timestamp": "2026-02-04T15:29:30.348703"
+    },
+    {
+      "name": "Chat - VA Benefits",
+      "status": "PASS",
+      "details": "Response length: 360, mentions VA: True",
+      "timestamp": "2026-02-04T15:29:30.560697"
+    },
+    {
+      "name": "Chat - Spend Down",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:30.770497"
+    },
+    {
+      "name": "Chat - Facility Recommendation",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:30.983053"
+    },
+    {
+      "name": "Chat - Deceased Spouse Debt",
+      "status": "PASS",
+      "details": "Response length: 36",
+      "timestamp": "2026-02-04T15:29:31.198681"
+    },
+    {
+      "name": "Chat - Look-Back Period",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:31.409802"
+    },
+    {
+      "name": "Chat - POA Documents",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:31.620657"
+    },
+    {
+      "name": "Chat - Medical History",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:31.829619"
+    },
+    {
+      "name": "Chat - Bank Records",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:32.046006"
+    },
+    {
+      "name": "Chat - Admission Checklist",
+      "status": "PASS",
+      "details": "Response length: 471",
+      "timestamp": "2026-02-04T15:29:32.257853"
+    },
+    {
+      "name": "Chat - Prescription Costs",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:32.468293"
+    },
+    {
+      "name": "Chat - Next Steps",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:32.674213"
+    },
+    {
+      "name": "Chat - Comprehensive Summary",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-04T15:29:32.891039"
+    },
+    {
+      "name": "Task Creation",
+      "status": "PASS",
+      "details": "Task created successfully",
+      "timestamp": "2026-02-04T15:29:32.896727"
+    },
+    {
+      "name": "Get Tasks",
+      "status": "PASS",
+      "details": "Retrieved 13 tasks",
+      "timestamp": "2026-02-04T15:29:32.899462"
+    }
+  ]
+}

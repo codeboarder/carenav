@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Gregory Katz <gregory.katz@microsoft.com>", "Rick Weyenberg"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standard"], version = "^0.128.0"}
+psycopg = {extras = ["binary"], version = "^3.3.2"}
+openai = "^2.16.0"
+python-dotenv = "^1.2.1"
+aiosqlite = "^0.22.1"
+sqlalchemy = "^2.0.46"
+httpx = "^0.28.1"
+pydantic-settings = "^2.12.0"
+
+[tool.poetry.extras]
+rag = ["chromadb"]
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+pytest-asyncio = "^1.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

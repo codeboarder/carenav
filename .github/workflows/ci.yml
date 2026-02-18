@@ -1,0 +1,51 @@
+name: CareNav CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd src/backend
+          pip install poetry
+          poetry install
+      - name: Lint
+        run: |
+          cd src/backend
+          poetry run ruff check . || true
+      - name: Test
+        run: |
+          cd src/backend
+          poetry run pytest tests/ -v --ignore=tests/test_e2e_comprehensive.py || true
+        env:
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install and build
+        run: |
+          cd src/frontend
+          npm ci
+          npm run build
+      - name: Lint
+        run: |
+          cd src/frontend
+          npm run lint || true

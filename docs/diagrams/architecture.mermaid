@@ -1,0 +1,106 @@
+%% CareNav Florida - System Architecture Diagram
+%% This diagram shows the multi-agent architecture and data flow
+
+graph TB
+    subgraph Frontend["Frontend (React + TypeScript)"]
+        UI[User Interface]
+        ES[Executive Summary]
+        IW[Intake Wizard]
+        CP[Chat Panel]
+        DT[Documents Tab]
+    end
+
+    subgraph API["Backend API (FastAPI)"]
+        Router[API Routers]
+        subgraph Agents["Agent System"]
+            Orch[Orchestrator Agent]
+            Elig[Eligibility Agent]
+            Fac[Facility Agent]
+            Legal[Legal Agent]
+            Val[Validator Agent]
+            Sum[Summarizer Agent]
+        end
+        subgraph Services["Services"]
+            LLM[LLM Service Layer]
+            Azure[Azure OpenAI Provider]
+            Copilot[Copilot SDK Provider]
+            KB[Knowledge Base]
+        end
+    end
+
+    subgraph Data["Data Layer"]
+        SQLite[(SQLite Database)]
+        Chroma[(ChromaDB Vector Store)]
+    end
+
+    subgraph MCP["MCP Servers"]
+        Med[Medicaid Server]
+        VA[VA Benefits Server]
+        FacS[Facility Search Server]
+        Doc[Document RAG Server]
+    end
+
+    subgraph External["External Services"]
+        AzureOAI[Azure OpenAI API]
+        CopilotAPI[GitHub Copilot SDK]
+    end
+
+    %% Frontend connections
+    UI --> ES
+    UI --> IW
+    UI --> CP
+    UI --> DT
+
+    %% API connections
+    ES --> Router
+    IW --> Router
+    CP --> Router
+    DT --> Router
+
+    %% Router to Agents
+    Router --> Orch
+    Orch --> Elig
+    Orch --> Fac
+    Orch --> Legal
+    Orch --> Val
+    Orch --> Sum
+
+    %% Agents to Services
+    Elig --> LLM
+    Fac --> LLM
+    Legal --> LLM
+    Val --> LLM
+    Sum --> LLM
+
+    %% LLM Service to Providers
+    LLM --> Azure
+    LLM -.-> Copilot
+
+    %% Providers to External
+    Azure --> AzureOAI
+    Copilot -.-> CopilotAPI
+
+    %% Data connections
+    Router --> SQLite
+    KB --> Chroma
+    LLM --> KB
+
+    %% MCP connections (future)
+    Copilot -.-> Med
+    Copilot -.-> VA
+    Copilot -.-> FacS
+    Copilot -.-> Doc
+
+    %% Styling
+    classDef frontend fill:#3b82f6,stroke:#1e40af,color:#fff
+    classDef backend fill:#10b981,stroke:#047857,color:#fff
+    classDef data fill:#f59e0b,stroke:#b45309,color:#fff
+    classDef external fill:#8b5cf6,stroke:#5b21b6,color:#fff
+    classDef mcp fill:#ec4899,stroke:#be185d,color:#fff
+    classDef future stroke-dasharray: 5 5
+
+    class UI,ES,IW,CP,DT frontend
+    class Router,Orch,Elig,Fac,Legal,Val,Sum,LLM,Azure,Copilot,KB backend
+    class SQLite,Chroma data
+    class AzureOAI,CopilotAPI external
+    class Med,VA,FacS,Doc mcp

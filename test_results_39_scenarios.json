@@ -1,0 +1,241 @@
+{
+  "total": 39,
+  "passed": 39,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "01. Health Check",
+      "status": "PASS",
+      "details": "Status: 200",
+      "timestamp": "2026-02-17T17:41:14.562071"
+    },
+    {
+      "name": "02. Docs Endpoint",
+      "status": "PASS",
+      "details": "Status: 200",
+      "timestamp": "2026-02-17T17:41:14.563837"
+    },
+    {
+      "name": "03. Healthz Endpoint",
+      "status": "PASS",
+      "details": "Status: 200",
+      "timestamp": "2026-02-17T17:41:14.565264"
+    },
+    {
+      "name": "04. Get Patients",
+      "status": "PASS",
+      "details": "Found 1 patients",
+      "timestamp": "2026-02-17T17:41:14.569581"
+    },
+    {
+      "name": "05. Get Patient Details",
+      "status": "PASS",
+      "details": "Patient ID: 1",
+      "timestamp": "2026-02-17T17:41:14.575322"
+    },
+    {
+      "name": "06. Create Patient",
+      "status": "PASS",
+      "details": "Using existing patient (validation)",
+      "timestamp": "2026-02-17T17:41:14.578573"
+    },
+    {
+      "name": "07. Get Documents",
+      "status": "PASS",
+      "details": "Found 37 documents",
+      "timestamp": "2026-02-17T17:41:14.591347"
+    },
+    {
+      "name": "08. Generate Demo Documents",
+      "status": "PASS",
+      "details": "Generated 37 documents",
+      "timestamp": "2026-02-17T17:41:14.600189"
+    },
+    {
+      "name": "09. Document Categories",
+      "status": "PASS",
+      "details": "Found 10 categories: {'ai_analysis', 'bank', 'legal', 'income', 'property', 'medical', 'insurance', 'identity', 'veteran', 'financial'}",
+      "timestamp": "2026-02-17T17:41:14.611267"
+    },
+    {
+      "name": "10. Document Content",
+      "status": "PASS",
+      "details": "37 docs have substantial content",
+      "timestamp": "2026-02-17T17:41:14.621198"
+    },
+    {
+      "name": "11. Document Count Check",
+      "status": "PASS",
+      "details": "37 documents exist",
+      "timestamp": "2026-02-17T17:41:14.631125"
+    },
+    {
+      "name": "12. Medicaid Eligibility",
+      "status": "PASS",
+      "details": "Result: {'medicaid': {'eligible': False, 'countable': 3000.0, 'over_by': 1000.0, 'asset_eligible': False, 'i",
+      "timestamp": "2026-02-17T17:41:14.640043"
+    },
+    {
+      "name": "13. VA Eligibility Chat",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.665079"
+    },
+    {
+      "name": "14. Medicare Eligibility Chat",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.681640"
+    },
+    {
+      "name": "15. Spend-Down Calculation",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.693047"
+    },
+    {
+      "name": "16. Facility Search",
+      "status": "PASS",
+      "details": "Found 0 facilities",
+      "timestamp": "2026-02-17T17:41:14.695245"
+    },
+    {
+      "name": "17. ALF Facility Search",
+      "status": "PASS",
+      "details": "Search completed",
+      "timestamp": "2026-02-17T17:41:14.697461"
+    },
+    {
+      "name": "18. SNF Facility Search",
+      "status": "PASS",
+      "details": "Search completed",
+      "timestamp": "2026-02-17T17:41:14.699389"
+    },
+    {
+      "name": "19. Facility Recommendation Chat",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.718010"
+    },
+    {
+      "name": "20. Chat - Medicaid Question",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.733875"
+    },
+    {
+      "name": "21. Chat - VA Benefits",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.747497"
+    },
+    {
+      "name": "22. Chat - Spend-Down Strategies",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.769217"
+    },
+    {
+      "name": "23. Chat - Look-Back Period",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.784938"
+    },
+    {
+      "name": "24. Chat - Deceased Spouse Debt",
+      "status": "PASS",
+      "details": "Response length: 36",
+      "timestamp": "2026-02-17T17:41:14.795670"
+    },
+    {
+      "name": "25. Chat - POA Documents",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.805103"
+    },
+    {
+      "name": "26. Chat - Medical History",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.816269"
+    },
+    {
+      "name": "27. Chat - Bank Records",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.827144"
+    },
+    {
+      "name": "28. Chat - Next Steps",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.840844"
+    },
+    {
+      "name": "29. Chat - Comprehensive Summary",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.860380"
+    },
+    {
+      "name": "30. Chat - Admission Checklist",
+      "status": "PASS",
+      "details": "Response length: 471",
+      "timestamp": "2026-02-17T17:41:14.882342"
+    },
+    {
+      "name": "31. Chat - Prescription Costs",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.908960"
+    },
+    {
+      "name": "32. Chat - Weekly Action Plan",
+      "status": "PASS",
+      "details": "Response length: 718",
+      "timestamp": "2026-02-17T17:41:14.935076"
+    },
+    {
+      "name": "33. Create Task",
+      "status": "PASS",
+      "details": "Created task ID: 16",
+      "timestamp": "2026-02-17T17:41:14.947318"
+    },
+    {
+      "name": "34. Get Tasks",
+      "status": "PASS",
+      "details": "Found 16 tasks",
+      "timestamp": "2026-02-17T17:41:14.955089"
+    },
+    {
+      "name": "35. Update Task",
+      "status": "PASS",
+      "details": "Updated task 16",
+      "timestamp": "2026-02-17T17:41:14.963239"
+    },
+    {
+      "name": "36. Complete Task",
+      "status": "PASS",
+      "details": "Completed task 16",
+      "timestamp": "2026-02-17T17:41:14.971324"
+    },
+    {
+      "name": "37. Multi-Agent Complex Query",
+      "status": "PASS",
+      "details": "Response length: 360",
+      "timestamp": "2026-02-17T17:41:14.987608"
+    },
+    {
+      "name": "38. Multi-Agent Financial+Legal",
+      "status": "PASS",
+      "details": "Response length: 356",
+      "timestamp": "2026-02-17T17:41:15.014809"
+    },
+    {
+      "name": "39. Multi-Agent Care Transition",
+      "status": "PASS",
+      "details": "Response length: 471",
+      "timestamp": "2026-02-17T17:41:15.039275"
+    }
+  ]
+}

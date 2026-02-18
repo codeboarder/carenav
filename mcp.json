@@ -1,0 +1,433 @@
+{
+  "$schema": "https://raw.githubusercontent.com/github/copilot-sdk/main/schemas/mcp.schema.json",
+  "name": "carenav-florida",
+  "version": "1.0.0",
+  "description": "CareNav Florida - Multi-Agent Elder Care Navigation System for Florida Medicaid, VA Benefits, and Facility Selection",
+  "servers": [
+    {
+      "name": "medicaid",
+      "description": "Florida Medicaid ICP eligibility and spend-down calculations",
+      "command": "python",
+      "args": ["-m", "src.backend.mcp_servers.medicaid_server"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "tools": [
+        {
+          "name": "check_medicaid_eligibility",
+          "description": "Check Florida Medicaid ICP eligibility based on assets, income, and marital status. Returns eligibility status, spend-down amount if needed, and relevant rules.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "assets": {
+                "type": "number",
+                "description": "Total countable assets in dollars (excludes home, one vehicle, burial plots)"
+              },
+              "income": {
+                "type": "number",
+                "description": "Monthly gross income in dollars"
+              },
+              "marital_status": {
+                "type": "string",
+                "enum": ["single", "married", "widowed"],
+                "description": "Patient's marital status"
+              },
+              "spouse_assets": {
+                "type": "number",
+                "description": "Spouse's countable assets (for CSRA calculation)"
+              }
+            },
+            "required": ["assets", "income"]
+          }
+        },
+        {
+          "name": "get_medicaid_rules",
+          "description": "Get current Florida Medicaid ICP rules and limits for the specified year",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "year": {
+                "type": "integer",
+                "description": "Year for rules (defaults to current year)"
+              },
+              "rule_type": {
+                "type": "string",
+                "enum": ["asset_limits", "income_limits", "look_back", "exempt_assets", "csra"],
+                "description": "Type of rule to retrieve"
+              }
+            }
+          }
+        },
+        {
+          "name": "calculate_spend_down",
+          "description": "Calculate spend-down amount and suggest legal strategies to reach Medicaid eligibility",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "current_assets": {
+                "type": "number",
+                "description": "Current countable assets in dollars"
+              },
+              "target_limit": {
+                "type": "number",
+                "description": "Target asset limit (defaults to $2,000 for single)"
+              },
+              "patient_needs": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "List of patient needs that could justify spend-down (e.g., 'wheelchair', 'home_modification')"
+              }
+            },
+            "required": ["current_assets"]
+          }
+        },
+        {
+          "name": "check_look_back_violations",
+          "description": "Check for potential Medicaid look-back period violations from asset transfers",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "transfers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "amount": {"type": "number"},
+                    "date": {"type": "string", "format": "date"},
+                    "recipient": {"type": "string"},
+                    "purpose": {"type": "string"}
+                  }
+                },
+                "description": "List of asset transfers in the past 5 years"
+              },
+              "application_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Planned Medicaid application date"
+              }
+            },
+            "required": ["transfers"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "va_benefits",
+      "description": "VA Aid & Attendance eligibility and benefit calculations",
+      "command": "python",
+      "args": ["-m", "src.backend.mcp_servers.va_benefits_server"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "tools": [
+        {
+          "name": "check_va_eligibility",
+          "description": "Check VA Aid & Attendance eligibility for veteran or surviving spouse",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "is_veteran": {
+                "type": "boolean",
+                "description": "Is the patient a veteran?"
+              },
+              "is_spouse_of_veteran": {
+                "type": "boolean",
+                "description": "Is the patient a spouse/surviving spouse of a veteran?"
+              },
+              "wartime_service": {
+                "type": "boolean",
+                "description": "Did the veteran serve during a wartime period?"
+              },
+              "veteran_deceased": {
+                "type": "boolean",
+                "description": "Is the veteran deceased? (for surviving spouse benefits)"
+              },
+              "service_connected_disability": {
+                "type": "boolean",
+                "description": "Does the veteran have a service-connected disability?"
+              },
+              "net_worth": {
+                "type": "number",
+                "description": "Total net worth in dollars"
+              }
+            },
+            "required": ["wartime_service"]
+          }
+        },
+        {
+          "name": "calculate_va_benefit",
+          "description": "Calculate the maximum VA Aid & Attendance benefit amount",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "beneficiary_type": {
+                "type": "string",
+                "enum": ["veteran_single", "veteran_married", "surviving_spouse"],
+                "description": "Type of beneficiary"
+              },
+              "care_costs": {
+                "type": "number",
+                "description": "Monthly unreimbursed care costs"
+              },
+              "current_income": {
+                "type": "number",
+                "description": "Current monthly income"
+              }
+            },
+            "required": ["beneficiary_type"]
+          }
+        },
+        {
+          "name": "get_required_documents",
+          "description": "Get list of required documents for VA Aid & Attendance application",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "beneficiary_type": {
+                "type": "string",
+                "enum": ["veteran", "surviving_spouse"],
+                "description": "Type of beneficiary"
+              },
+              "has_dd214": {
+                "type": "boolean",
+                "description": "Does the applicant already have the DD-214?"
+              }
+            },
+            "required": ["beneficiary_type"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "facility_search",
+      "description": "Search and compare Florida care facilities (AL, MC, SNF)",
+      "command": "python",
+      "args": ["-m", "src.backend.mcp_servers.facility_search_server"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "tools": [
+        {
+          "name": "search_facilities",
+          "description": "Search for care facilities in Florida matching specified criteria",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "zip_code": {
+                "type": "string",
+                "description": "Center ZIP code for search"
+              },
+              "care_level": {
+                "type": "string",
+                "enum": ["AL", "MC", "SNF"],
+                "description": "Care level: AL=Assisted Living, MC=Memory Care, SNF=Skilled Nursing"
+              },
+              "medicaid_required": {
+                "type": "boolean",
+                "description": "Must facility accept Medicaid?"
+              },
+              "max_distance_miles": {
+                "type": "number",
+                "description": "Maximum distance from ZIP code in miles"
+              },
+              "min_rating": {
+                "type": "number",
+                "description": "Minimum star rating (1-5)"
+              },
+              "specialized_care": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Required specialized care (e.g., 'dementia', 'dialysis', 'ventilator')"
+              }
+            },
+            "required": ["zip_code", "care_level"]
+          }
+        },
+        {
+          "name": "compare_facilities",
+          "description": "Compare multiple facilities side-by-side",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "facility_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "List of facility IDs to compare"
+              },
+              "comparison_factors": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Factors to compare (e.g., 'cost', 'rating', 'staff_ratio', 'amenities')"
+              }
+            },
+            "required": ["facility_ids"]
+          }
+        },
+        {
+          "name": "check_admission_requirements",
+          "description": "Check if a patient meets a facility's admission requirements",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "facility_id": {
+                "type": "string",
+                "description": "Facility ID"
+              },
+              "patient_profile": {
+                "type": "object",
+                "properties": {
+                  "care_level_needed": {"type": "string"},
+                  "diagnoses": {"type": "array", "items": {"type": "string"}},
+                  "mobility": {"type": "string"},
+                  "payment_type": {"type": "string"}
+                },
+                "description": "Patient's care profile"
+              }
+            },
+            "required": ["facility_id", "patient_profile"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "document_rag",
+      "description": "RAG-based search over patient documents (medical records, financial statements, etc.)",
+      "command": "python",
+      "args": ["-m", "src.backend.mcp_servers.document_rag_server"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "CHROMA_PERSIST_DIR": "${workspaceFolder}/data/chroma"
+      },
+      "tools": [
+        {
+          "name": "search_documents",
+          "description": "Search patient documents using semantic similarity",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Search query"
+              },
+              "patient_id": {
+                "type": "integer",
+                "description": "Patient ID to search documents for"
+              },
+              "category": {
+                "type": "string",
+                "enum": ["medical", "financial", "legal", "insurance", "all"],
+                "description": "Document category filter"
+              },
+              "date_range": {
+                "type": "object",
+                "properties": {
+                  "start": {"type": "string", "format": "date"},
+                  "end": {"type": "string", "format": "date"}
+                },
+                "description": "Filter by document date range"
+              },
+              "top_k": {
+                "type": "integer",
+                "description": "Number of results to return (default: 5)"
+              }
+            },
+            "required": ["query", "patient_id"]
+          }
+        },
+        {
+          "name": "get_document",
+          "description": "Retrieve a specific document by ID",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "document_id": {
+                "type": "integer",
+                "description": "Document ID"
+              },
+              "include_content": {
+                "type": "boolean",
+                "description": "Include full document content (default: true)"
+              }
+            },
+            "required": ["document_id"]
+          }
+        },
+        {
+          "name": "list_documents",
+          "description": "List all documents for a patient",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "patient_id": {
+                "type": "integer",
+                "description": "Patient ID"
+              },
+              "category": {
+                "type": "string",
+                "description": "Filter by category"
+              },
+              "sort_by": {
+                "type": "string",
+                "enum": ["date", "category", "title"],
+                "description": "Sort order"
+              }
+            },
+            "required": ["patient_id"]
+          }
+        },
+        {
+          "name": "summarize_documents",
+          "description": "Generate a summary of documents matching a query",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "patient_id": {
+                "type": "integer",
+                "description": "Patient ID"
+              },
+              "category": {
+                "type": "string",
+                "description": "Document category to summarize"
+              },
+              "focus_areas": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Specific areas to focus summary on"
+              }
+            },
+            "required": ["patient_id"]
+          }
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "name": "carenav_system",
+      "description": "System prompt for CareNav Florida assistant",
+      "content": "You are CareNav Florida, an AI assistant helping families navigate elder care decisions in Florida. You have access to specialized tools for checking Medicaid eligibility, VA benefits, searching care facilities, and reviewing patient documents.\n\nAlways:\n1. Be empathetic - families are going through a difficult time\n2. Be specific - provide exact dollar amounts, dates, and action items\n3. Be accurate - use the tools to verify information rather than guessing\n4. Be compliant - include appropriate disclaimers that this is not legal or financial advice\n\nWhen helping a family:\n1. First understand their complete situation (patient needs, finances, veteran status)\n2. Check eligibility for all applicable programs (Medicaid, VA, Medicare)\n3. Search for appropriate facilities if needed\n4. Provide a clear action plan with prioritized next steps"
+    },
+    {
+      "name": "eligibility_check",
+      "description": "Prompt for comprehensive eligibility assessment",
+      "content": "Please analyze the patient's eligibility for Florida Medicaid ICP and VA Aid & Attendance benefits.\n\nPatient Information:\n- Assets: {{assets}}\n- Monthly Income: {{income}}\n- Marital Status: {{marital_status}}\n- Veteran Status: {{veteran_status}}\n- Spouse Veteran Status: {{spouse_veteran_status}}\n\nProvide:\n1. Medicaid ICP eligibility status and any spend-down needed\n2. VA Aid & Attendance eligibility and estimated benefit\n3. Recommended next steps prioritized by impact"
+    },
+    {
+      "name": "facility_recommendation",
+      "description": "Prompt for facility search and recommendation",
+      "content": "Please search for care facilities matching the patient's needs.\n\nRequirements:\n- Location: {{zip_code}}\n- Care Level: {{care_level}}\n- Must Accept Medicaid: {{medicaid_required}}\n- Maximum Distance: {{max_distance}} miles\n- Special Needs: {{special_needs}}\n\nProvide:\n1. Top 3-5 matching facilities with key details\n2. Comparison of costs and features\n3. Recommendation based on patient's specific situation"
+    }
+  ],
+  "resources": [
+    {
+      "name": "florida_medicaid_rules",
+      "description": "Current Florida Medicaid ICP rules and limits",
+      "uri": "file://${workspaceFolder}/docs/florida_medicaid_rules.json"
+    },
+    {
+      "name": "va_benefits_guide",
+      "description": "VA Aid & Attendance eligibility guide",
+      "uri": "file://${workspaceFolder}/docs/va_benefits_guide.json"
+    }
+  ]
+}
