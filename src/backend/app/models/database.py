@@ -1,4 +1,7 @@
 """SQLite database models for CareNav Florida."""
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
 from datetime import datetime, date
 from typing import Optional
 from sqlalchemy import (
@@ -8,6 +11,25 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
+
+# ============================================================
+# AZURE SQL SWAP — Rick: Uncomment this block after provisioning
+# Azure SQL Server + Database (see RICK_ENGINEERING_WORKBOOK.md §1A)
+# ============================================================
+# import os
+# from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+# from sqlalchemy.orm import sessionmaker
+#
+# AZURE_SQL_CONNECTION = (
+#     "mssql+aioodbc://"
+#     f"{os.getenv('AZURE_SQL_USERNAME')}:{os.getenv('AZURE_SQL_PASSWORD')}"
+#     f"@{os.getenv('AZURE_SQL_SERVER')}/{os.getenv('AZURE_SQL_DATABASE')}"
+#     "?driver=ODBC+Driver+18+for+SQL+Server&Encrypt=yes&TrustServerCertificate=no"
+# )
+#
+# # Replace the SQLite engine below with:
+# # engine = create_async_engine(AZURE_SQL_CONNECTION, echo=False)
+# ============================================================
 
 Base = declarative_base()
 

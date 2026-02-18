@@ -1,8 +1,8 @@
 """
 LLM Service Abstraction Layer
 ==============================
-Built with Rick Weyenberg and Greg Katz collaborating
-Copyright (c) 2026 - MIT License
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
 
 This module abstracts all LLM interactions so they can be swapped
 between Azure OpenAI (current) and GitHub Copilot SDK (target).

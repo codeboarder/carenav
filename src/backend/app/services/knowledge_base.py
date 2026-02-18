@@ -1,4 +1,28 @@
 """ChromaDB knowledge base service for CareNav Florida."""
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
+# ============================================================
+# AZURE AI SEARCH SWAP — Rick: Replace this entire file with
+# search_service.py after provisioning Azure AI Search
+# (see RICK_ENGINEERING_WORKBOOK.md §1C)
+#
+# New file should:
+# 1. Import azure-search-documents + azure-core
+# 2. Create SearchClient with AZURE_SEARCH_ENDPOINT + AZURE_SEARCH_API_KEY
+# 3. Use index name: "carenav-documents"
+# 4. Implement hybrid_search() with VectorizedQuery + semantic ranking
+# 5. Use text-embedding-3-large (3072 dimensions) for embeddings
+#
+# Key swap:
+#   OLD: chromadb.PersistentClient → collection.query(query_texts=[...])
+#   NEW: SearchClient → search(search_text=..., vector_queries=[...], query_type="semantic")
+#
+# Existing export endpoint (/api/knowledge/export/azure-search/)
+# already formats documents for Azure AI Search bulk upload.
+# Use it to seed the index after provisioning.
+# ============================================================
+
 import os
 from typing import Optional
 

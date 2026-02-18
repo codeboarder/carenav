@@ -49,7 +49,16 @@ npm-debug.log*
 # Test outputs (keep for reference but don't commit)
 test_documents/
 test_results.json
+test_results*.json
+
+# Internal docs (Rick's workbook, Gregory's checklist)
+.internal/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Additional sensitive patterns
+*.env
+credentials.json
+secrets.json
