@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

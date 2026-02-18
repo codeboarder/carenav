@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * CareNav Florida - Main Application
  * Built with Rick Weyenberg and Greg Katz collaborating

@@ -1,4 +1,8 @@
-"""Task API endpoints for CareNav Florida (Ticket 2: Dependencies + Assignees)."""
+"""
+Task API endpoints for CareNav Florida (Ticket 2: Dependencies + Assignees).
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select

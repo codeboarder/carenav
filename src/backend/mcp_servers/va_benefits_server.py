@@ -1,3 +1,6 @@
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
 """
 VA Benefits MCP Server for CareNav Florida.
 

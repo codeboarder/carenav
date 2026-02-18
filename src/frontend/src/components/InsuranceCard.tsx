@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Insurance Card - Displays all insurance policies (Medicare, Medicaid, private)
  */

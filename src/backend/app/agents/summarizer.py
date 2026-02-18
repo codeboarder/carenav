@@ -1,4 +1,8 @@
-"""Summarizer Agent for CareNav Florida - Plain English output generation."""
+"""
+Summarizer Agent for CareNav Florida - Plain English output generation.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from app.agents.base import BaseAgent
 

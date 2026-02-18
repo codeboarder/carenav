@@ -1,4 +1,8 @@
-"""Documents API router for CareNav Florida."""
+"""
+Documents API router for CareNav Florida.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 import json
 from datetime import datetime
 from typing import Optional

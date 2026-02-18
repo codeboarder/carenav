@@ -201,42 +201,61 @@ class AzureOpenAIProvider(LLMProvider):
 
 class CopilotSDKProvider(LLMProvider):
     """
-    PLACEHOLDER for GitHub Copilot SDK integration.
-    Gregory will implement this locally in VS Code.
+    GitHub Copilot SDK Integration Provider.
+    Built by Gregory Katz and Rick Weyenberg
     
-    The implementation will:
-    1. Import CopilotClient from @github/copilot-sdk (via Node.js subprocess or bridge)
-    2. Create a session with the desired model
-    3. Register custom tools (the 6 agents) with the session
-    4. Send prompts and return responses
+    ============================================================
+    THREE IMPLEMENTATION OPTIONS (choose one):
+    ============================================================
     
-    Since the SDK is Node.js and the backend is Python, options are:
-    a) Use a Node.js sidecar process that the Python backend calls via HTTP
-    b) Rewrite the backend service layer in Node.js
-    c) Use the Copilot CLI in server mode and call it via JSON-RPC from Python
+    OPTION A: Copilot CLI Server Mode (RECOMMENDED)
+    -----------------------------------------------
+    The CLI runs as a local server, Python calls it via HTTP.
+    No Node.js wrapper needed - simplest integration path.
     
-    Option (c) is recommended - the CLI runs as a server, and Python sends
-    JSON-RPC messages directly. No Node.js wrapper needed.
+    Steps:
+    1. npm install -g @github/copilot-cli
+    2. copilot-cli serve --port 4321
+    3. Set COPILOT_CLI_PORT=4321 in .env
+    4. Implement methods below to POST to http://localhost:4321
     
-    IMPLEMENTATION STEPS FOR GREGORY:
+    OPTION B: Node.js Sidecar Process
+    ----------------------------------
+    Run a small Express server that wraps the SDK.
+    Python calls the sidecar via HTTP.
     
-    1. Install the Copilot CLI:
-       npm install -g @github/copilot-cli
+    Steps:
+    1. Create /sidecar/index.js with Express + @github/copilot-sdk
+    2. npm install express @github/copilot-sdk
+    3. node sidecar/index.js (runs on port 4321)
+    4. Python calls http://localhost:4321/chat
     
-    2. Start the CLI in server mode:
-       copilot-cli serve --port 3000
+    OPTION C: Full Node.js Backend
+    -------------------------------
+    Rewrite the LLM service layer in Node.js/TypeScript.
+    Most native SDK experience but largest code change.
     
-    3. Implement the methods below to call the CLI via HTTP/JSON-RPC:
-       - POST /chat for chat completions
-       - POST /embed for embeddings
+    Steps:
+    1. Create /src/backend-node/ with TypeScript
+    2. npm install @github/copilot-sdk fastify
+    3. Implement chat endpoints using SDK directly
+    4. Run Node backend alongside or instead of Python
     
-    4. Register the MCP servers as tools:
-       - medicaid_server.py -> check_medicaid_eligibility, etc.
-       - va_benefits_server.py -> check_va_eligibility, etc.
-       - facility_search_server.py -> search_facilities, etc.
-       - document_rag_server.py -> search_documents, etc.
+    ============================================================
+    MCP TOOL REGISTRATION
+    ============================================================
     
-    5. Change get_llm_provider() to return CopilotSDKProvider()
+    Register the 4 MCP servers as tools with the Copilot session:
+    - medicaid_server.py -> check_medicaid_eligibility, get_medicaid_rules
+    - va_benefits_server.py -> check_va_eligibility, calculate_va_benefit
+    - facility_search_server.py -> search_facilities, compare_facilities
+    - document_rag_server.py -> search_documents, get_document
+    
+    See mcp.json at repo root for full tool definitions.
+    
+    ============================================================
+    TO ACTIVATE: Change provider_type = "copilot_sdk" in get_llm_provider()
+    ============================================================
     """
     
     def __init__(self):

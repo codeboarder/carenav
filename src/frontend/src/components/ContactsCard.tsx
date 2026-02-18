@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Contacts Directory Card (Ticket 6)
  * Shows contacts grouped by category with tap-to-call

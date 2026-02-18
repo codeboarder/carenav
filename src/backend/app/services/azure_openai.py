@@ -1,4 +1,8 @@
-"""Azure OpenAI service for CareNav Florida."""
+"""
+Azure OpenAI service for CareNav Florida.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 import json
 from typing import Optional
 from openai import AsyncAzureOpenAI

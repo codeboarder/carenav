@@ -1,4 +1,8 @@
-"""Validator Agent for CareNav Florida - Cross-check and dissent detection."""
+"""
+Validator Agent for CareNav Florida - Cross-check and dissent detection.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from app.agents.base import BaseAgent
 

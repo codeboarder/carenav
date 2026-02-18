@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Selected Facility Card - Detailed view of the chosen facility (like Barr. tab)
  */

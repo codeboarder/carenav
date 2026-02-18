@@ -1,4 +1,8 @@
-"""Base agent class for CareNav Florida multi-agent system."""
+"""
+Base agent class for CareNav Florida multi-agent system.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from abc import ABC, abstractmethod
 from typing import Optional
 from app.services.llm_service import get_llm_provider

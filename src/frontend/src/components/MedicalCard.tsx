@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Medical Card - Displays diagnoses, medications, vitals, allergies
  */

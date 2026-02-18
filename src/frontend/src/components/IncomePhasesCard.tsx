@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Income Phases Timeline Card (Ticket 4)
  * Shows 3-phase income progression

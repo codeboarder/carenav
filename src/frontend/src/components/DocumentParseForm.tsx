@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Document Parse Form - Upload and parse documents with AI
  * Extracts structured data and stores in appropriate database tables

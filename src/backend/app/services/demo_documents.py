@@ -1,4 +1,8 @@
-"""Demo documents service for CareNav Florida."""
+"""
+Demo documents service for CareNav Florida.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import select

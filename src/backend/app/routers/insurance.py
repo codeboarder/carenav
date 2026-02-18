@@ -1,4 +1,8 @@
-"""Insurance API router."""
+"""
+Insurance API router.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List

@@ -1,4 +1,8 @@
-"""Orchestrator Agent for CareNav Florida - Coordinates all other agents."""
+"""
+Orchestrator Agent for CareNav Florida - Coordinates all other agents.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 import os
 from typing import Optional
 from app.agents.base import BaseAgent
@@ -8,12 +12,34 @@ from app.agents.legal import LegalAgent
 from app.agents.validator import ValidatorAgent
 from app.agents.summarizer import SummarizerAgent
 
-# Lazy import for knowledge base to avoid loading ChromaDB on startup
+# ============================================================
+# KNOWLEDGE BASE SWAP — Rick: After provisioning Azure AI Search,
+# change the import below from knowledge_base to search_service
+# ============================================================
+# CURRENT: ChromaDB (local development)
+# from app.services.knowledge_base import get_knowledge_base_service
+#
+# TARGET: Azure AI Search (enterprise deployment)
+# from app.services.search_service import get_search_service
+# ============================================================
+
 _knowledge_base_service = None
 
 
 def _get_knowledge_base():
-    """Lazy getter for knowledge base service."""
+    """
+    Lazy getter for knowledge base service.
+    
+    Rick: After Azure AI Search is provisioned, swap this to use SearchService:
+    
+    CURRENT (ChromaDB):
+        from app.services.knowledge_base import get_knowledge_base_service
+        return get_knowledge_base_service()
+    
+    TARGET (Azure AI Search):
+        from app.services.search_service import get_search_service
+        return get_search_service()
+    """
     global _knowledge_base_service
     if _knowledge_base_service is None:
         # Check if ChromaDB is disabled
@@ -24,6 +50,7 @@ def _get_knowledge_base():
                     return []
             _knowledge_base_service = DummyKnowledgeBase()
         else:
+            # CURRENT: ChromaDB (swap to search_service after Azure AI Search provisioning)
             from app.services.knowledge_base import get_knowledge_base_service
             _knowledge_base_service = get_knowledge_base_service()
     return _knowledge_base_service

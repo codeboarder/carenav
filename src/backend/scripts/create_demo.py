@@ -1,3 +1,6 @@
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
 """Create a fully populated demo scenario for CareNav Florida.
 
 Updated for 8 Enhancement Tickets:

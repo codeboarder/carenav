@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Benefit Application Pipeline Card (Ticket 5)
  * Shows benefit applications in pipeline stages

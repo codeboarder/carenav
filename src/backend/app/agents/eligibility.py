@@ -1,4 +1,8 @@
-"""Eligibility Agent for CareNav Florida - Medicaid, VA, Medicare calculations."""
+"""
+Eligibility Agent for CareNav Florida - Medicaid, VA, Medicare calculations.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from app.agents.base import BaseAgent
 

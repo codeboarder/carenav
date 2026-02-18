@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Assets Sale Pipeline Card (Ticket 8)
  * Shows assets with sale status and title tracking

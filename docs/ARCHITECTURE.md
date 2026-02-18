@@ -49,9 +49,9 @@ CareNav Florida is a multi-agent AI system that helps families navigate elder ca
 │  ┌─────────────────────────────────────────────────────────────────────────┐│
 │  │                          Data Layer                                      ││
 │  │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────────┐  ││
-│  │  │    SQLite       │    │   ChromaDB      │    │  Demo Documents     │  ││
-│  │  │   (Patients,    │    │   (Vector       │    │    Service          │  ││
-│  │  │    Tasks, Docs) │    │    Search)      │    │                     │  ││
+│  │  │  Azure SQL DB   │    │ Azure AI Search │    │  Demo Documents     │  ││
+│  │  │   (Patients,    │    │   (Vector +     │    │    Service          │  ││
+│  │  │    Tasks, Docs) │    │    Semantic)    │    │                     │  ││
 │  │  └─────────────────┘    └─────────────────┘    └─────────────────────┘  ││
 │  └─────────────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -102,8 +102,8 @@ The backend is a REST API built with FastAPI. Key modules:
 - Python 3.11
 - FastAPI for REST API
 - SQLAlchemy for ORM
-- SQLite for database
-- ChromaDB for vector search (optional)
+- Azure SQL Database (target) / SQLite (local dev)
+- Azure AI Search (target) / ChromaDB (local dev)
 - Poetry for dependency management
 
 ### LLM Service Abstraction Layer
@@ -214,9 +214,9 @@ CREATE TABLE tasks (
 );
 ```
 
-**ChromaDB (Optional):**
+**Azure AI Search (Target) / ChromaDB (Local Dev):**
 
-Used for semantic search over patient documents. Embeddings are generated using Azure OpenAI's text-embedding model.
+Used for semantic search over patient documents. Embeddings are generated using Azure OpenAI's text-embedding-3-large model. For enterprise deployment, Azure AI Search provides hybrid vector + semantic search with Foundry IQ for agentic retrieval.
 
 ### MCP Servers (Future)
 
@@ -299,8 +299,8 @@ Four MCP servers are defined in `mcp.json` for GitHub Copilot SDK integration:
 
 ## Scalability Considerations
 
-1. **Database**: SQLite suitable for demo; PostgreSQL for production
-2. **Vector Search**: ChromaDB suitable for demo; Pinecone/Weaviate for production
+1. **Database**: SQLite for local dev; Azure SQL Database for enterprise
+2. **Vector Search**: ChromaDB for local dev; Azure AI Search + Foundry IQ for enterprise
 3. **LLM**: Azure OpenAI scales automatically; rate limiting may be needed
 4. **Caching**: Add Redis for frequently accessed data in production
 

@@ -1,4 +1,8 @@
-"""Patient API endpoints for CareNav Florida (Ticket 1: Spouse Death Intake)."""
+"""
+Patient API endpoints for CareNav Florida (Ticket 1: Spouse Death Intake).
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select

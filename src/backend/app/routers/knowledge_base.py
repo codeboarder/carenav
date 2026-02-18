@@ -1,4 +1,8 @@
-"""Knowledge Base API router for CareNav Florida."""
+"""
+Knowledge Base API router for CareNav Florida.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel

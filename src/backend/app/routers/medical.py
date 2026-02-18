@@ -1,4 +1,8 @@
-"""Medical information API router."""
+"""
+Medical information API router.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List

@@ -158,7 +158,7 @@ To show what CareNav can do, we built a complete scenario based on a composite o
 
 ## RAG Knowledge Base
 
-CareNav includes a comprehensive RAG (Retrieval-Augmented Generation) knowledge base indexed in ChromaDB that provides AI agents with authoritative rules, policies, and guidance on elder care transitions.
+CareNav includes a comprehensive RAG (Retrieval-Augmented Generation) knowledge base that provides AI agents with authoritative rules, policies, and guidance on elder care transitions. The knowledge base supports both local development (SQLite) and enterprise deployment (Azure AI Search with Foundry IQ).
 
 ### Knowledge Base Collections
 
@@ -233,8 +233,8 @@ MCP Servers                 Azure OpenAI (BYOK)
 ├── VA Benefits             ├── gpt-5-nano (fast responses)
 ├── Facility Search         └── text-embedding-3-large
 └── Document RAG
-    ├── ChromaDB (vectors)
-    └── SQLite (structured data)
+    ├── Azure AI Search (vectors + semantic)
+    └── Azure SQL Database (structured data)
 ```
 
 <p align="center">

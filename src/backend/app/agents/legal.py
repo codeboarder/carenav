@@ -1,4 +1,8 @@
-"""Legal Agent for CareNav Florida - Spend-down strategies and mistake prevention."""
+"""
+Legal Agent for CareNav Florida - Spend-down strategies and mistake prevention.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from app.agents.base import BaseAgent
 

@@ -1,4 +1,8 @@
-"""Facility Agent for CareNav Florida - Facility search and scoring."""
+"""
+Facility Agent for CareNav Florida - Facility search and scoring.
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from typing import Optional
 from app.agents.base import BaseAgent
 

@@ -2,6 +2,8 @@
 CareNav Florida - Main Application
 Built with Rick Weyenberg and Greg Katz collaborating
 Copyright (c) 2026 - MIT License
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
 """
 # Load environment variables FIRST before any other imports
 from dotenv import load_dotenv

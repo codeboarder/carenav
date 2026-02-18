@@ -1,3 +1,6 @@
+// Built by Gregory Katz and Rick Weyenberg
+// Code is as-is, open source
+
 /**
  * Bills Dashboard Card (Ticket 3)
  * Shows bills due summary with tap-to-call

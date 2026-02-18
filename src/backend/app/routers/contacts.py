@@ -1,4 +1,8 @@
-"""Contact directory API endpoints for CareNav Florida (Ticket 6)."""
+"""
+Contact directory API endpoints for CareNav Florida (Ticket 6).
+Built by Gregory Katz and Rick Weyenberg
+Code is as-is, open source
+"""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select

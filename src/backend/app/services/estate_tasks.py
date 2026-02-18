@@ -1,3 +1,6 @@
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
 """Estate task auto-generation service for CareNav Florida (Ticket 1).
 
 When spouse_deceased = TRUE during intake, this service auto-generates
