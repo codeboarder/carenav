@@ -51,8 +51,7 @@ test_documents/
 test_results.json
 test_results*.json
 
-# Internal docs (Rick's workbook, Gregory's checklist)
-.internal/
+# Internal docs are now in .internal/ directory (accessible to Rick)
 
 # OS
 .DS_Store
