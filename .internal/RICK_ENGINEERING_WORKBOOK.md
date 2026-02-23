@@ -1655,6 +1655,255 @@ VITE_API_URL=http://localhost:8000
 
 ---
 
+## WORKSTREAM 5: Azure Web App Deployment
+
+After completing the data layer migration and Copilot SDK integration, deploy the application to Azure App Service.
+
+### 5A: Create Azure App Service Resources
+
+```bash
+# Create an App Service Plan (Linux, Python)
+az appservice plan create \
+  --name carenav-plan \
+  --resource-group carenav-rg \
+  --location eastus2 \
+  --sku B1 \
+  --is-linux
+
+# Create the Web App for the FastAPI backend
+az webapp create \
+  --name carenav-backend \
+  --resource-group carenav-rg \
+  --plan carenav-plan \
+  --runtime "PYTHON:3.11"
+
+# Create a Static Web App for the React frontend (or use Azure Static Web Apps)
+az staticwebapp create \
+  --name carenav-frontend \
+  --resource-group carenav-rg \
+  --location eastus2 \
+  --sku Free
+```
+
+### 5B: Configure Backend Web App
+
+```bash
+# Set environment variables for the backend
+az webapp config appsettings set \
+  --name carenav-backend \
+  --resource-group carenav-rg \
+  --settings \
+    AZURE_OPENAI_ENDPOINT="https://ahfy26-resource.cognitiveservices.azure.com/" \
+    AZURE_OPENAI_API_KEY="<your-key>" \
+    AZURE_OPENAI_API_VERSION="2024-12-01-preview" \
+    AZURE_OPENAI_DEPLOYMENT="gpt-5.2" \
+    AZURE_SQL_SERVER="carenav-sql-server.database.windows.net" \
+    AZURE_SQL_DATABASE="carenav-db" \
+    AZURE_SQL_USERNAME="carenavadmin" \
+    AZURE_SQL_PASSWORD="<your-password>" \
+    AZURE_SEARCH_ENDPOINT="https://carenav-search.search.windows.net" \
+    AZURE_SEARCH_API_KEY="<your-search-key>" \
+    AZURE_SEARCH_INDEX="carenav-documents" \
+    LLM_PROVIDER="azure"
+
+# Configure startup command for FastAPI
+az webapp config set \
+  --name carenav-backend \
+  --resource-group carenav-rg \
+  --startup-file "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000"
+```
+
+### 5C: Deploy Backend to Azure Web App
+
+**Option A: Deploy from local (recommended for testing)**
+
+```bash
+cd src/backend
+
+# Create requirements.txt from poetry
+poetry export -f requirements.txt --output requirements.txt --without-hashes
+
+# Deploy using Azure CLI
+az webapp up \
+  --name carenav-backend \
+  --resource-group carenav-rg \
+  --runtime "PYTHON:3.11"
+```
+
+**Option B: Deploy via GitHub Actions (recommended for production)**
+
+Create `.github/workflows/deploy-backend.yml`:
+
+```yaml
+name: Deploy Backend to Azure Web App
+
+on:
+  push:
+    branches: [MAIN1]
+    paths:
+      - 'src/backend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd src/backend
+          pip install poetry
+          poetry export -f requirements.txt --output requirements.txt --without-hashes
+          pip install -r requirements.txt
+      
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: carenav-backend
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: src/backend
+```
+
+### 5D: Deploy Frontend to Azure Static Web Apps
+
+```bash
+cd src/frontend
+
+# Build the frontend
+npm run build
+
+# Deploy to Azure Static Web Apps
+az staticwebapp deploy \
+  --name carenav-frontend \
+  --resource-group carenav-rg \
+  --source dist \
+  --env production
+```
+
+**Update frontend .env for production:**
+
+```bash
+# src/frontend/.env.production
+VITE_API_URL=https://carenav-backend.azurewebsites.net
+```
+
+### 5E: Verify Deployment
+
+After deployment, verify:
+
+1. Backend health check: `https://carenav-backend.azurewebsites.net/health`
+2. Frontend loads: `https://carenav-frontend.azurestaticapps.net`
+3. API calls work from frontend to backend
+4. All 6 AI agents respond correctly
+5. Document search returns results from Azure AI Search
+
+---
+
+## WORKSTREAM 6: Microsoft Fabric Integration (Optional - Advanced)
+
+Microsoft Fabric provides a unified analytics platform. For CareNav, Fabric can be used for:
+- Real-time analytics on patient care data
+- Power BI dashboards for care coordinators
+- Data lakehouse for long-term document storage
+
+### 6A: Create Fabric Workspace
+
+1. Go to https://app.fabric.microsoft.com
+2. Create a new workspace: "CareNav Analytics"
+3. Enable the workspace for Fabric capacity
+
+### 6B: Create Lakehouse for Document Storage
+
+```python
+# In Fabric notebook - create lakehouse tables
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.getOrCreate()
+
+# Create patients table
+patients_df = spark.read.format("jdbc").options(
+    url="jdbc:sqlserver://carenav-sql-server.database.windows.net:1433;database=carenav-db",
+    dbtable="patients",
+    user="carenavadmin",
+    password="<password>"
+).load()
+
+patients_df.write.format("delta").mode("overwrite").saveAsTable("carenav_lakehouse.patients")
+
+# Create documents table
+documents_df = spark.read.format("jdbc").options(
+    url="jdbc:sqlserver://carenav-sql-server.database.windows.net:1433;database=carenav-db",
+    dbtable="documents",
+    user="carenavadmin",
+    password="<password>"
+).load()
+
+documents_df.write.format("delta").mode("overwrite").saveAsTable("carenav_lakehouse.documents")
+```
+
+### 6C: Create Power BI Dashboard
+
+Create a Power BI report in Fabric with:
+
+1. **Patient Overview** - Total patients, care levels, locations
+2. **Document Analytics** - Documents by category, upload trends
+3. **Task Tracking** - Open tasks, overdue items, completion rates
+4. **Benefits Pipeline** - Medicaid/VA application status
+5. **Facility Comparison** - Cost analysis, ratings, availability
+
+### 6D: Connect CareNav to Fabric (Optional API)
+
+If you want CareNav to push data to Fabric in real-time:
+
+```python
+# src/backend/app/services/fabric_service.py
+# Built by Gregory Katz and Rick Weyenberg
+# Code is as-is, open source
+
+"""
+Microsoft Fabric integration for analytics and reporting.
+"""
+
+import os
+import requests
+from typing import Dict, Any
+
+class FabricService:
+    def __init__(self):
+        self.workspace_id = os.getenv("FABRIC_WORKSPACE_ID")
+        self.lakehouse_id = os.getenv("FABRIC_LAKEHOUSE_ID")
+        self.api_endpoint = f"https://api.fabric.microsoft.com/v1/workspaces/{self.workspace_id}"
+    
+    async def push_patient_event(self, patient_id: str, event_type: str, data: Dict[str, Any]):
+        """Push a patient event to Fabric for real-time analytics."""
+        # Implementation depends on Fabric's real-time analytics setup
+        # Could use Event Streams, Kusto, or direct lakehouse writes
+        pass
+    
+    async def get_analytics_summary(self, patient_id: str) -> Dict[str, Any]:
+        """Get analytics summary from Fabric Power BI."""
+        # Query Fabric for pre-computed analytics
+        pass
+```
+
+### 6E: Environment Variables for Fabric
+
+Add to `.env`:
+
+```bash
+# --- Microsoft Fabric (optional) ---
+FABRIC_WORKSPACE_ID=your-workspace-guid
+FABRIC_LAKEHOUSE_ID=your-lakehouse-guid
+FABRIC_TENANT_ID=your-tenant-id
+```
+
+---
+
 ## Priority Order
 
 1. Provision Azure resources (SQL Server + Database + AI Search) — **do this first**
