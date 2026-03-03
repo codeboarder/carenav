@@ -320,10 +320,10 @@ Navigate to `http://localhost:5173` — Margaret Thompson demo loads automatical
 
 ## Challenge Submission Checklist (Due Mar 7, 10 PM PST)
 
-- [ ] 150-word project summary — `/submissions/project_summary.md`
+- [✅] 150-word project summary — `/submissions/project_summary.md`
 - [ ] 3-min demo video — record and upload to submission form
 - [ ] Working GitHub repo with README, architecture diagram, setup instructions
-- [ ] Presentation deck (1-2 slides) — `/presentations/CareNavFlorida.pptx`
+- [✅] Presentation deck (1-2 slides) — `/presentations/CareNavFlorida.pptx`
 - [ ] AGENTS.md — agent definitions and custom instructions
 - [ ] mcp.json — MCP server configuration
 - [ ] Product feedback screenshot — post in SDK team channel
@@ -359,6 +359,6 @@ Code is as-is, open source.
 ## Authors
 
 **Gregory Katz** — Director, Cloud & AI Platforms, Microsoft Corporation
-**Rick Weyenberg** — Microsoft
+**Rick Weyenberg** — Principal Cloud Solution Architect, Microsoft Corporation
 
 *CareNav Florida was built because one of us lived this crisis and wished this tool existed. Every feature in this system addresses a real problem that real families face every day.*
