@@ -12,6 +12,8 @@ psycopg = {extras = ["binary"], version = "^3.3.2"}
 openai = "^2.16.0"
 python-dotenv = "^1.2.1"
 aiosqlite = "^0.22.1"
+aioodbc = "^0.5.0"
+pyodbc = "^5.1.0"
 sqlalchemy = "^2.0.46"
 httpx = "^0.28.1"
 pydantic-settings = "^2.12.0"

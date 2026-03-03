@@ -35,11 +35,11 @@ AZURE_OPENAI_API_VERSION=2024-02-15-preview
 MODEL_GPT_5_2=gpt-5.2
 MODEL_GPT_5_NANO=gpt-5-nano
 MODEL_EMBEDDING=text-embedding-ada-002
-DATABASE_URL=sqlite:///./carenav.db
+DATABASE_URL=sqlite+aiosqlite:///./carenav.db
 EOF
 
 # Run database migrations (creates tables)
-poetry run python -c "from app.models.database import init_db; import asyncio; asyncio.run(init_db())"
+poetry run python -c "from app.config import get_settings; from app.models.database import init_db; import asyncio; asyncio.run(init_db(get_settings().resolve_database_url()))"
 
 # Create demo patient (Margaret Thompson)
 poetry run python scripts/create_demo.py
@@ -81,7 +81,12 @@ The frontend will be available at http://localhost:5173
 | `MODEL_GPT_5_2` | Primary model deployment name | `gpt-5.2` |
 | `MODEL_GPT_5_NANO` | Fast model deployment name | `gpt-5-nano` |
 | `MODEL_EMBEDDING` | Embedding model deployment name | `text-embedding-ada-002` |
-| `DATABASE_URL` | SQLite database path | `sqlite:///./carenav.db` |
+| `DATABASE_URL` | SQLAlchemy async DB URL (SQLite or Azure SQL) | `sqlite+aiosqlite:///./carenav.db` |
+| `AZURE_SQL_SERVER` | Azure SQL server (optional if `DATABASE_URL` set) | `your-server.database.windows.net` |
+| `AZURE_SQL_DATABASE` | Azure SQL database name | `carenav-db` |
+| `AZURE_SQL_USERNAME` | Azure SQL username | `carenavadmin` |
+| `AZURE_SQL_PASSWORD` | Azure SQL password | `***` |
+| `AZURE_SQL_ODBC_DRIVER` | ODBC driver for Azure SQL | `ODBC Driver 18 for SQL Server` |
 | `CHROMA_ENABLED` | Enable ChromaDB (optional) | `false` |
 
 ### Frontend (.env)

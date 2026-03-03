@@ -6,7 +6,7 @@ from datetime import datetime, date
 from typing import Optional
 from sqlalchemy import (
     Column, Integer, String, Text, Boolean, Date, DateTime,
-    ForeignKey, Numeric, JSON, create_engine
+    ForeignKey, Numeric, JSON
 )
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -660,14 +660,22 @@ _engine = None
 _session_maker = None
 
 
-async def init_db(database_url: str = "sqlite+aiosqlite:///./carenav.db"):
+async def init_db(database_url: str):
     """Initialize the database and create all tables."""
     global _engine, _session_maker
-    _engine = create_async_engine(database_url, echo=False)
+    engine_kwargs = {
+        "echo": False,
+        "pool_pre_ping": True,
+    }
+    if database_url.startswith("mssql+aioodbc"):
+        engine_kwargs["pool_recycle"] = 1800
+
+    _engine = create_async_engine(database_url, **engine_kwargs)
     async with _engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        # Run migrations for existing databases
-        await conn.run_sync(_run_migrations)
+        # Run legacy SQLite migrations only for SQLite databases.
+        if database_url.startswith("sqlite"):
+            await conn.run_sync(_run_migrations)
     _session_maker = sessionmaker(_engine, class_=AsyncSession, expire_on_commit=False)
     return _engine
 

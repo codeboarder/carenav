@@ -13,6 +13,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.config import get_settings
 from app.models.database import init_db
 from app.routers import (
     patients_router,
@@ -37,7 +38,8 @@ from app.routers.knowledge_base import router as knowledge_base_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize database on startup."""
-    await init_db()
+    settings = get_settings()
+    await init_db(settings.resolve_database_url())
     yield
 
 
